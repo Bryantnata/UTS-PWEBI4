@@ -27,7 +27,38 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
+
+  // Fungsi untuk logout
+  const logoutButton = document.getElementById('logoutBtn');
+
+  logoutButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Mencegah aksi default dari anchor tag
+
+    swal({
+      title: "Apakah kamu yakin ingin keluar?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willLogout) => {
+      if (willLogout) {
+        window.location.href = "/index.html";
+      }
+    });
+  });
+
+  // Panggil fungsi displayReports saat halaman dimuat
+  const transaksiList = document.getElementById("transaksiList");
+  transaksiList.innerHTML = "";
+  displayReports();
+
+  // Call the function when the page is loaded
+  handleSidebarButtons();
+
+  // Also call handleSidebarButtons() when navigation occurs
+  window.addEventListener("popstate", handleSidebarButtons);
 });
+
+
 
 // Panggil fungsi untuk menampilkan waktu setiap detik
 setInterval(displayTime, 1000);
@@ -47,9 +78,9 @@ function goRole() {
   window.location.href = "/html/role.html";
 }
 
-// Fungsi untuk kembali ke halaman role
-function goRole() {
-  window.location.href
+//untuk kembali ke halaman sebelumnya
+function goBack() {
+  window.history.back();
 }
 
 // Fungsi untuk memvalidasi form login
@@ -96,14 +127,6 @@ function validateForm() {
   return true;
 }
 
-// Panggil fungsi displayReports saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-  // Kosongkan tabel laporan
-  const transaksiList = document.getElementById("transaksiList");
-  transaksiList.innerHTML = "";
-
-  displayReports();
-});
 
 // Fungsi untuk menampilkan tabel hasil submit
 function displayReports(location) {
@@ -179,15 +202,15 @@ function displayReports(location) {
       typeCell.textContent = report.type;
       typeCell.classList.add("border", "border-gray-400", "px-4", "py-2");
 
-      /// Isi kolom status
+      // Isi kolom status
       var statusCell = row.insertCell(5);
       statusCell.textContent = report.status;
       statusCell.classList.add("border", "border-gray-400", "px-4", "py-2");
 
       // Tambahkan kelas Tailwind CSS untuk warna latar belakang sesuai dengan status
       if (report.status === "Belum diperbaiki") {
-        statusCell.classList.add("bg-red-500","text-center");
-      } else if (report.status === "Sedang Diperbaiki","text-center") {
+        statusCell.classList.add("bg-red-500");
+      } else if (report.status === "Sedang Diperbaiki") {
         statusCell.classList.add("bg-yellow-500");
       } else if (report.status === "Selesai diperbaiki") {
         statusCell.classList.add("bg-green-500");
@@ -219,9 +242,30 @@ function displayReports(location) {
         );
         // Atur event listener untuk button detail
         detailButton.addEventListener("click", function () {
-          // Tambahkan logika untuk menangani detail laporan di sini
-          alert("Detail laporan dengan kode: " + report.code);
+          // Dapatkan kode laporan dari data pada baris yang sama
+          const reportCode = report.code;
+
+          // Ambil data laporan yang sesuai dengan kode dari local storage
+          const selectedReport = reports.find(
+            (report) => report.code === reportCode
+          );
+
+          // Periksa apakah laporan ditemukan
+          if (selectedReport) {
+            // Simpan data laporan terpilih ke dalam local storage
+            localStorage.setItem(
+              "selectedReport",
+              JSON.stringify(selectedReport)
+            );
+
+            // Redirect ke halaman detail.html
+            window.location.href = "/html/detail.html";
+          } else {
+            // Tampilkan pesan jika laporan tidak ditemukan
+            swal("Error!", "Laporan tidak ditemukan.", "error");
+          }
         });
+
         detailCell.appendChild(detailButton);
       }
     });
@@ -233,6 +277,19 @@ function displayReports(location) {
     cell.textContent = "Tidak ada laporan yang tersedia.";
     row.classList.add("border", "border-gray-400"); // Tambahkan kelas border dengan ketebalan 1px dan warna sesuai dengan Tailwind CSS pada baris
   }
+}
+
+// Retrieve report details from local storage
+const reportDetails = JSON.parse(localStorage.getItem("selectedReport"));
+
+// Populate HTML elements with report details
+if (reportDetails) {
+  document.getElementById("name").innerText = reportDetails.name;
+  document.getElementById("address").innerText = reportDetails.address;
+  document.getElementById("itemName").innerText = reportDetails.itemName;
+  document.getElementById("brand").innerText = reportDetails.brand;
+  document.getElementById("type").innerText = reportDetails.type;
+  document.getElementById("complaint").innerText = reportDetails.complaint;
 }
 
 // Fungsi untuk memeriksa apakah tanggal adalah hari ini
@@ -250,25 +307,7 @@ function goToReport() {
   window.location.href = "/html/laporan.html";
 }
 
-// Fungsi untuk logout
-const logoutBtn = document.getElementById("logoutBtn");
-logoutBtn.addEventListener("click", () => {
-  swal({
-    title: "Apakah kamu yakin ingin keluar?",
-    icon: "warning",
-    buttons: true,
-    dangerMode: true,
-  }).then((willLogout) => {
-    if (willLogout) {
-      window.location.href = "/index.html";
-    }
-  });
-});
 
-// Panggil fungsi displayReports saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-  displayReports();
-});
 
 // Fungsi untuk membuat kode laporan berdasarkan tanggal dan urutan submit
 function generateReportCode(date, reports) {
@@ -401,13 +440,7 @@ function handleSidebarButtons() {
   });
 }
 
-// Call the function when the page is loaded
-document.addEventListener("DOMContentLoaded", function () {
-  handleSidebarButtons();
 
-  // Also call handleSidebarButtons() when navigation occurs
-  window.addEventListener("popstate", handleSidebarButtons);
-});
 
 // Ambil elemen input dan tombol delete
 const deleteButton = document.getElementById("deleteBtn"); // Ubah id tombol

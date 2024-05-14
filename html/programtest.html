@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lihat Laporan</title>
+    <script>
+        // Fungsi untuk mencari laporan berdasarkan kode
+        function findReportByCode(reportCode) {
+            // Ambil laporan dari Local Storage
+            const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+            // Cari laporan dengan kode yang sesuai
+            const foundReport = reports.find(report => report.code === reportCode);
+
+            return foundReport; // Mengembalikan laporan yang ditemukan atau null jika tidak ditemukan
+        }
+
+        // Fungsi untuk menampilkan semua data laporan dalam tabel
+        function displayAllReports() {
+            const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+            const tableDiv = document.getElementById("allReports");
+
+            if (reports.length > 0) {
+                // Jika terdapat laporan, tampilkan dalam bentuk tabel
+                let tableHTML = `
+                    <h2>Semua Laporan</h2>
+                    <table border="1">
+                        <tr>
+                            <th>Kode Laporan</th>
+                            <th>Tanggal</th>
+                            <th>Nama Pelapor</th>
+                            <th>Alamat</th>
+                            <th>Nama Barang</th>
+                            <th>Merek</th>
+                            <th>Tipe</th>
+                            <th>Keluhan</th>
+                            <th>Status</th>
+                        </tr>
+                `;
+
+                reports.forEach(report => {
+                    tableHTML += `
+                        <tr>
+                            <td>${report.code}</td>
+                            <td>${report.date}</td>
+                            <td>${report.name}</td>
+                            <td>${report.address}</td>
+                            <td>${report.itemName}</td>
+                            <td>${report.brand}</td>
+                            <td>${report.type}</td>
+                            <td>${report.complaint}</td>
+                            <td>${report.status}</td>
+                        </tr>
+                    `;
+                });
+
+                tableHTML += `</table>`;
+                tableDiv.innerHTML = tableHTML;
+            } else {
+                // Jika tidak ada laporan
+                tableDiv.innerHTML = "<p>Tidak ada laporan yang tersedia.</p>";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Lihat Laporan</h1>
+    <label for="kodeLaporan">Masukkan Kode Laporan:</label>
+    <input type="text" id="kodeLaporan" name="kodeLaporan">
+    <button onclick="displayReport()">Tampilkan</button>
+
+    <div id="result"></div>
+
+    <hr>
+
+    <div id="allReports"></div>
+
+    <script>
+        // Panggil fungsi untuk menampilkan semua laporan saat halaman dimuat
+        displayAllReports();
+    </script>
+</body>
+</html>

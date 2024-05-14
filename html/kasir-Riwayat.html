@@ -71,7 +71,55 @@
     </aside>
     <!-- Content Area: Riwayat -->
     <div class="ml-64">
-      <!-- Riwayat Content Goes Here -->
+      <!-- Transaksi Content Goes Here -->
+      <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-4 text-center">Daftar Riwayat</h1>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <!-- Button untuk hapus semua data, diletakkan di paling kiri -->
+          <!-- Input dan tombol untuk hapus baris, diletakkan di bagian kanan -->
+        </div>
+        <table class="w-full border-collapse border border-gray-400">
+          <thead>
+            <tr class="divide-x divide-gray-400">
+              <th class="px-4 py-2">No</th>
+              <th class="px-4 py-2">Kode</th>
+              <th class="px-4 py-2">Nama Pemilik</th>
+              <th class="px-4 py-2">Tipe Barang</th>
+              <th class="px-4 py-2">Total Harga</th>
+              <th class="px-4 py-2">Detail</th>
+            </tr>
+          </thead>
+          <tbody id="riwayatList">
+            <!-- Data transaksi akan ditampilkan di sini -->
+            <tr class="divide-x divide-gray-400">
+                <td class="border border-gray-400 px-4 py-2">1</td>
+                <td class="border border-gray-400 px-4 py-2">13052401</td>
+                <td class="border border-gray-400 px-4 py-2">John Doe</td>
+                <td class="border border-gray-400 px-4 py-2">Asus DX700s</td>
+                <td class="border border-gray-400 px-4 py-2">$1200</td>
+                <td class="border border-gray-400 px-4 py-2">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Detail
+                    </button>
+                </td>
+            </tr>
+            <tr class="divide-x divide-gray-400">
+                <td class="border border-gray-400 px-4 py-2">2</td>
+                <td class="border border-gray-400 px-4 py-2">13052402</td>
+                <td class="border border-gray-400 px-4 py-2">John Doe</td>
+                <td class="border border-gray-400 px-4 py-2">Asus DX700s</td>
+                <td class="border border-gray-400 px-4 py-2">$1200</td>
+                <td class="border border-gray-400 px-4 py-2">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Detail
+                    </button>
+                </td>
+            </tr>
+            <!-- Tambahkan baris data lainnya sesuai kebutuhan -->
+        </tbody>
+        
+        </table>
+      </div>
     </div>
     <!-- JavaScript -->
     <script src="/js/script.js"></script>
