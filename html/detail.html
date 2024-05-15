@@ -12,59 +12,58 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   </head>
   <body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto py-8">
-      <button
-        onclick="goBack()"
-        type="button"
-        class="text-red-500 hover:text-red-700 font-semibold focus:outline-none"
-      >
-        Kembali
-      </button>
-      <h1 class="text-3xl font-bold my-8 text-center">Detail Laporan</h1>
-      <div class="bg-white rounded shadow-md p-6 mx-auto max-w-xl mb-8">
-        <div
-          id="reportDetails"
-          class="bg-white rounded shadow-md p-6 mx-auto max-w-xl mb-8"
-        >
-          <table class="table-auto w-full">
-            <tbody>
-              <tr>
-                <td class="font-semibold pr-4">Nama Pemilik</td>
-                <td class="font-semibold">:</td>
-                <td><span id="name"></span></td>
-              </tr>
-              <tr>
-                <td class="font-semibold pr-4">Alamat</td>
-                <td class="font-semibold">:</td>
-                <td><span id="address"></span></td>
-              </tr>
-              <tr>
-                <td class="font-semibold pr-4">Nama Barang</td>
-                <td class="font-semibold">:</td>
-                <td><span id="itemName"></span></td>
-              </tr>
-              <tr>
-                <td class="font-semibold pr-4">Merk</td>
-                <td class="font-semibold">:</td>
-                <td><span id="brand"></span></td>
-              </tr>
-              <tr>
-                <td class="font-semibold pr-4">Tipe</td>
-                <td class="font-semibold">:</td>
-                <td><span id="type"></span></td>
-              </tr>
-              <tr>
-                <td class="font-semibold pr-4">Keluhan Barang</td>
-                <td class="font-semibold">:</td>
-                <td><span id="complaint"></span></td>
-              </tr>
-            </tbody>
-          </table>
+    <button
+      onclick="goBack()"
+      type="button"
+      class="text-red-500 hover:text-red-700 font-semibold focus:outline-none fixed top-4 left-4"
+    >
+      Kembali
+    </button>
+    <div class="container mx-auto py-8 px-4 md:px-8 lg:px-16">
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex-grow">
+          <h1 class="text-3xl font-bold text-center">Detail Laporan</h1>
         </div>
       </div>
-      <div class="bg-white rounded shadow-md p-6 mx-auto max-w-xl">
+      <div class="bg-white rounded shadow-md p-6 mx-auto mb-8 w-full max-w-6xl">
+        <table class="table-auto w-full">
+            <tbody>
+                <tr>
+                    <td class="font-semibold pr-4">Nama Pemilik</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="name"></span></td>
+                </tr>
+                <tr>
+                    <td class="font-semibold pr-4">Alamat</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="address"></span></td>
+                </tr>
+                <tr>
+                    <td class="font-semibold pr-4">Nama Barang</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="itemName"></span></td>
+                </tr>
+                <tr>
+                    <td class="font-semibold pr-4">Merk</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="brand"></span></td>
+                </tr>
+                <tr>
+                    <td class="font-semibold pr-4">Tipe</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="type"></span></td>
+                </tr>
+                <tr>
+                    <td class="font-semibold pr-4">Keluhan Barang</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="complaint"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+      <div class="bg-white rounded shadow-md p-6 mx-auto w-full max-w-6xl">
         <h2 class="text-2xl font-bold mb-4">Detail Perbaikan</h2>
-        <form id="repairDetailForm" class="mb-8">
+        <form id="repairDetailForm" class="mb-8 w-full">
           <div class="mb-4">
             <label class="block font-semibold mb-2" for="repairDetail"
               >Detail Perbaikan:</label
@@ -80,13 +79,13 @@
             <button
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
-              onclick="generateTable()"
+              onclick="generateTableDetail()"
             >
               Generate Tabel
             </button>
           </div>
         </form>
-        <div id="tableContainer">
+        <div id="tableContainer" class="w-full">
           <!-- Data tabel akan ditampilkan di sini -->
         </div>
         <div class="mt-5 flex justify-center">
@@ -110,104 +109,76 @@
 
     <script src="/js/script.js"></script>
     <script>
-      // Ambil data dari local storage
-      const ownerName = localStorage.getItem("ownerName");
-      const ownerAddress = localStorage.getItem("ownerAddress");
-      const itemName = localStorage.getItem("itemName");
-      const brand = localStorage.getItem("brand");
-      const type = localStorage.getItem("type");
-      const complaint = localStorage.getItem("complaint");
+function generateTableDetail() {
+    // Mendapatkan nilai dari textarea detail perbaikan
+    const repairDetail = document.getElementById("repairDetail").value.trim();
+    if (repairDetail) {
+        // Split setiap baris detail perbaikan
+        const rows = repairDetail.split("\n");
+        const tableContainer = document.getElementById("tableContainer");
 
-      // Periksa apakah ada data yang tersimpan
-      if (ownerName && ownerAddress && itemName && brand && type && complaint) {
-        // Tampilkan data
-        document.getElementById("ownerName").innerText = ownerName;
-        document.getElementById("ownerAddress").innerText = ownerAddress;
-        document.getElementById("itemName").innerText = itemName;
-        document.getElementById("brand").innerText = brand;
-        document.getElementById("type").innerText = type;
-        document.getElementById("complaint").innerText = complaint;
-        document.getElementById("reportData").classList.remove("hidden");
-      } else {
-        // Tampilkan pesan jika tidak ada data yang tersimpan
-        swal(
-          "Tidak ada data",
-          "Silakan masukkan data laporan terlebih dahulu",
-          "info"
-        );
-      }
+        // Cek apakah thead sudah ada, jika tidak tambahkan
+        let tableHeader = tableContainer.querySelector("thead");
+        if (!tableHeader) {
+            tableHeader = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            const columnHeader1 = document.createElement("th");
+            columnHeader1.textContent = "Jumlah";
+            const columnHeader2 = document.createElement("th");
+            columnHeader2.textContent = "Nama";
+            const columnHeader3 = document.createElement("th");
+            columnHeader3.textContent = "Tipe";
+            const columnHeader4 = document.createElement("th");
+            columnHeader4.textContent = "Harga";
+            const columnHeader5 = document.createElement("th");
+            columnHeader5.textContent = "Aksi"; // Kolom baru untuk tombol hapus
+            headerRow.appendChild(columnHeader1);
+            headerRow.appendChild(columnHeader2);
+            headerRow.appendChild(columnHeader3);
+            headerRow.appendChild(columnHeader4);
+            headerRow.appendChild(columnHeader5); // Tambahkan kolom aksi
+            tableHeader.appendChild(headerRow);
+            tableContainer.appendChild(tableHeader);
+        }
 
-      function goToDashboard() {
-        // Fungsi untuk kembali ke dashboard
-      }
+        // Cek apakah tbody sudah ada, jika tidak tambahkan
+        let tableBody = tableContainer.querySelector("tbody");
+        if (!tableBody) {
+            tableBody = document.createElement("tbody");
+            tableContainer.appendChild(tableBody);
+        }
 
-      function generateTable() {
-        // Mendapatkan nilai dari textarea detail perbaikan
-        const repairDetail = document
-          .getElementById("repairDetail")
-          .value.trim();
-        if (repairDetail) {
-          // Split setiap baris detail perbaikan
-          const rows = repairDetail.split("\n");
-          const tableContainer = document.getElementById("tableContainer");
-
-          // Hapus judul kolom jika sudah ada
-          const existingHeader = tableContainer.querySelector("thead");
-          if (existingHeader) {
-            existingHeader.remove();
-          }
-
-          // Tambahkan nama kolom
-          const tableHeader = document.createElement("thead");
-          const headerRow = document.createElement("tr");
-          const columnHeader1 = document.createElement("th");
-          columnHeader1.textContent = "Jumlah";
-          const columnHeader2 = document.createElement("th");
-          columnHeader2.textContent = "Nama";
-          const columnHeader3 = document.createElement("th");
-          columnHeader3.textContent = "Tipe";
-          const columnHeader4 = document.createElement("th");
-          columnHeader4.textContent = "Harga";
-          headerRow.appendChild(columnHeader1);
-          headerRow.appendChild(columnHeader2);
-          headerRow.appendChild(columnHeader3);
-          headerRow.appendChild(columnHeader4);
-          tableHeader.appendChild(headerRow);
-          tableContainer.appendChild(tableHeader);
-
-          // Tambahkan baris-baris baru
-          rows.forEach((row) => {
+        // Tambahkan baris-baris baru
+        rows.forEach((row) => {
             // Buat baris baru untuk setiap detail perbaikan
             const tr = document.createElement("tr");
             const td1 = document.createElement("td");
             const input1 = document.createElement("input");
             input1.setAttribute("type", "text");
             input1.classList.add(
-              "border",
-              "rounded",
-              "px-4",
-              "py-2",
-              "w-full",
-              "focus:outline-none",
-              "focus:ring",
-              "focus:border-blue-300"
+                "border",
+                "rounded",
+                "px-4",
+                "py-2",
+                "w-full",
+                "focus:outline-none",
+                "focus:ring",
+                "focus:border-blue-300"
             );
-            td1.appendChild(input1);
-            tr.appendChild(td1);
             td1.appendChild(input1);
             tr.appendChild(td1);
             const td2 = document.createElement("td");
             const input2 = document.createElement("input");
             input2.setAttribute("type", "text");
             input2.classList.add(
-              "border",
-              "rounded",
-              "px-4",
-              "py-2",
-              "w-full",
-              "focus:outline-none",
-              "focus:ring",
-              "focus:border-blue-300"
+                "border",
+                "rounded",
+                "px-4",
+                "py-2",
+                "w-full",
+                "focus:outline-none",
+                "focus:ring",
+                "focus:border-blue-300"
             );
             td2.appendChild(input2);
             tr.appendChild(td2);
@@ -215,14 +186,14 @@
             const input3 = document.createElement("input");
             input3.setAttribute("type", "text");
             input3.classList.add(
-              "border",
-              "rounded",
-              "px-4",
-              "py-2",
-              "w-full",
-              "focus:outline-none",
-              "focus:ring",
-              "focus:border-blue-300"
+                "border",
+                "rounded",
+                "px-4",
+                "py-2",
+                "w-full",
+                "focus:outline-none",
+                "focus:ring",
+                "focus:border-blue-300"
             );
             td3.appendChild(input3);
             tr.appendChild(td3);
@@ -230,29 +201,71 @@
             const input4 = document.createElement("input");
             input4.setAttribute("type", "text");
             input4.classList.add(
-              "border",
-              "rounded",
-              "px-4",
-              "py-2",
-              "w-full",
-              "focus:outline-none",
-              "focus:ring",
-              "focus:border-blue-300"
+                "border",
+                "rounded",
+                "px-4",
+                "py-2",
+                "w-full",
+                "focus:outline-none",
+                "focus:ring",
+                "focus:border-blue-300"
             );
             td4.appendChild(input4);
             tr.appendChild(td4);
-            // Tambahkan baris ke dalam tabel
-            tableContainer.appendChild(tr);
-          });
-        } else {
-          // Tampilkan pesan jika detail perbaikan kosong
-          swal(
+
+            // Tambahkan tombol hapus di kolom baru
+            const td5 = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Hapus";
+            deleteButton.classList.add(
+                "px-4",
+                "py-2",
+                "bg-red-500",
+                "text-white",
+                "rounded-md",
+                "focus:outline-none",
+                "hover:bg-red-600"
+            );
+            deleteButton.addEventListener("click", function () {
+                // Hapus baris saat tombol hapus ditekan
+                tr.remove();
+            });
+            td5.appendChild(deleteButton);
+            tr.appendChild(td5);
+
+            // Tambahkan baris ke dalam tbody
+            tableBody.appendChild(tr);
+        });
+    } else {
+        // Tampilkan pesan jika detail perbaikan kosong
+        swal(
             "Detail Perbaikan Kosong",
             "Silakan masukkan detail perbaikan terlebih dahulu",
             "info"
-          );
-        }
-      }
+        );
+    }
+}
+
+
+
+// Fungsi untuk menyimpan data detail perbaikan ke local storage
+function saveRepairDetail() {
+    const repairDetail = document.getElementById("repairDetail").value.trim();
+    localStorage.setItem("repairDetail", repairDetail);
+}
+
+// Fungsi untuk memuat data detail perbaikan dari local storage saat halaman dimuat
+function loadRepairDetail() {
+    const repairDetail = localStorage.getItem("repairDetail");
+    if (repairDetail) {
+        document.getElementById("repairDetail").value = repairDetail;
+        generateTableDetail(); // Panggil fungsi generateTableDetail untuk menampilkan tabel saat data sudah dimuat
+    }
+}
+
+// Panggil fungsi loadRepairDetail saat halaman dimuat
+window.onload = loadRepairDetail;
+
     </script>
   </body>
 </html>
