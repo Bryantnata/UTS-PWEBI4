@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nota</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
     <button
@@ -24,38 +24,38 @@
         <div class="bg-white rounded shadow-md p-6 mx-auto mb-8 w-full max-w-6xl">
             <table class="table-auto w-full">
                 <tbody>
-                    <tr>
-                        <td class="font-semibold pr-4">Nama Pemilik</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="name">John Doe</span></td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold pr-4">Alamat</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="address">123 Main Street, Anytown, USA</span></td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold pr-4">Nama Barang</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="itemName">Smartphone</span></td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold pr-4">Merk</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="brand">BrandX</span></td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold pr-4">Tipe</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="type">ModelA</span></td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold pr-4">Keluhan Barang</td>
-                        <td class="font-semibold">:</td>
-                        <td><span id="complaint">Layar retak, baterai cepat habis</span></td>
-                    </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Nama Pemilik</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="name"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Alamat</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="address"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Nama Barang</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="itemName"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Merk</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="brand"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Tipe</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="type"></span></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold pr-4">Keluhan Barang</td>
+                    <td class="font-semibold">:</td>
+                    <td><span id="complaint"></span></td>
+                  </tr>
                 </tbody>
-            </table>
+              </table>
         </div>    
         <div class="bg-white rounded shadow-md p-6 mx-auto w-full max-w-6xl">
             <h2 class="text-2xl font-bold mb-4">Detail Perbaikan</h2>
@@ -66,33 +66,38 @@
                 </div>
             </form>
             <div id="tableContainer" class="w-full">
-                <!-- Data tabel akan ditampilkan di sini -->
+                <table class="w-full table-auto border-collapse border border-gray-400">
+                    <thead>
+                        <tr class="divide-x divide-gray-400">
+                            <th class="px-4 py-2">Jumlah</th>
+                            <th class="px-4 py-2">Nama</th>
+                            <th class="px-4 py-2">Tipe</th>
+                            <th class="px-4 py-2">Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data dummy tabel -->
+                        <tr class="divide-x divide-gray-400">
+                            <td class="border border-gray-400 px-4 py-2">1</td>
+                            <td class="border border-gray-400 px-4 py-2">Dummy 1</td>
+                            <td class="border border-gray-400 px-4 py-2">Tipe 1</td>
+                            <td class="border border-gray-400 px-4 py-2">$100</td>
+                        </tr>
+                        <tr class="divide-x divide-gray-400">
+                            <td class="border border-gray-400 px-4 py-2">2</td>
+                            <td class="border border-gray-400 px-4 py-2">Dummy 2</td>
+                            <td class="border border-gray-400 px-4 py-2">Tipe 2</td>
+                            <td class="border border-gray-400 px-4 py-2">$200</td>
+                        </tr>
+                        <!-- Data dummy tabel lainnya -->
+                    </tbody>
+                </table>
             </div>
-            <div class="mt-5 flex justify-center">
-                <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2" type="button" onclick="repair()">Perbaiki</button>
-                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="finish()">Selesai</button>
+            <div class="mt-4 text-right">
+                <span class="font-semibold">Total Harga: $300</span>
             </div>
         </div>
     </div>
-
     <script src="/js/script.js"></script>
-    <script>
-        // Fungsi untuk menyimpan data detail perbaikan ke local storage
-        function saveRepairDetail() {
-            const repairDetail = document.getElementById("repairDetail").value.trim();
-            localStorage.setItem("repairDetail", repairDetail);
-        }
-
-        // Fungsi untuk memuat data detail perbaikan dari local storage saat halaman dimuat
-        function loadRepairDetail() {
-            const repairDetail = localStorage.getItem("repairDetail");
-            if (repairDetail) {
-                document.getElementById("repairDetail").value = repairDetail;
-            }
-        }
-
-        // Panggil fungsi loadRepairDetail saat halaman dimuat
-        window.onload = loadRepairDetail;
-    </script>
 </body>
 </html>

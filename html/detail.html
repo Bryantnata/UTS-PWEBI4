@@ -1,15 +1,14 @@
-<!-- detail.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detail</title>
+    <title>Detail Laporan</title>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body class="bg-gray-100 text-gray-800">
     <button
@@ -27,40 +26,40 @@
       </div>
       <div class="bg-white rounded shadow-md p-6 mx-auto mb-8 w-full max-w-6xl">
         <table class="table-auto w-full">
-            <tbody>
-                <tr>
-                    <td class="font-semibold pr-4">Nama Pemilik</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="name"></span></td>
-                </tr>
-                <tr>
-                    <td class="font-semibold pr-4">Alamat</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="address"></span></td>
-                </tr>
-                <tr>
-                    <td class="font-semibold pr-4">Nama Barang</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="itemName"></span></td>
-                </tr>
-                <tr>
-                    <td class="font-semibold pr-4">Merk</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="brand"></span></td>
-                </tr>
-                <tr>
-                    <td class="font-semibold pr-4">Tipe</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="type"></span></td>
-                </tr>
-                <tr>
-                    <td class="font-semibold pr-4">Keluhan Barang</td>
-                    <td class="font-semibold">:</td>
-                    <td><span id="complaint"></span></td>
-                </tr>
-            </tbody>
+          <tbody>
+            <tr>
+              <td class="font-semibold pr-4">Nama Pemilik</td>
+              <td class="font-semibold">:</td>
+              <td><span id="name"></span></td>
+            </tr>
+            <tr>
+              <td class="font-semibold pr-4">Alamat</td>
+              <td class="font-semibold">:</td>
+              <td><span id="address"></span></td>
+            </tr>
+            <tr>
+              <td class="font-semibold pr-4">Nama Barang</td>
+              <td class="font-semibold">:</td>
+              <td><span id="itemName"></span></td>
+            </tr>
+            <tr>
+              <td class="font-semibold pr-4">Merk</td>
+              <td class="font-semibold">:</td>
+              <td><span id="brand"></span></td>
+            </tr>
+            <tr>
+              <td class="font-semibold pr-4">Tipe</td>
+              <td class="font-semibold">:</td>
+              <td><span id="type"></span></td>
+            </tr>
+            <tr>
+              <td class="font-semibold pr-4">Keluhan Barang</td>
+              <td class="font-semibold">:</td>
+              <td><span id="complaint"></span></td>
+            </tr>
+          </tbody>
         </table>
-    </div>    
+      </div>
       <div class="bg-white rounded shadow-md p-6 mx-auto w-full max-w-6xl">
         <h2 class="text-2xl font-bold mb-4">Detail Perbaikan</h2>
         <form id="repairDetailForm" class="mb-8 w-full">
@@ -79,9 +78,8 @@
             <button
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
-              onclick="generateTableDetail()"
-            >
-              Generate Tabel
+              onclick="generateTable()"
+            >Rincian
             </button>
           </div>
         </form>
@@ -92,14 +90,14 @@
           <button
             class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
             type="button"
-            onclick="repair()"
+            onclick="perbaiki()"
           >
             Perbaiki
           </button>
           <button
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
-            onclick="finish()"
+            onclick="selesai()"
           >
             Selesai
           </button>
@@ -109,163 +107,37 @@
 
     <script src="/js/script.js"></script>
     <script>
-function generateTableDetail() {
-    // Mendapatkan nilai dari textarea detail perbaikan
-    const repairDetail = document.getElementById("repairDetail").value.trim();
-    if (repairDetail) {
-        // Split setiap baris detail perbaikan
-        const rows = repairDetail.split("\n");
-        const tableContainer = document.getElementById("tableContainer");
+      document.addEventListener("DOMContentLoaded", function () {
+        // Panggil fungsi untuk memuat detail laporan saat halaman dimuat
+        loadReportDetails();
+      });
+      function loadReportDetails() {
+        // Ambil kode laporan dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const reportCode = urlParams.get("code");
 
-        // Cek apakah thead sudah ada, jika tidak tambahkan
-        let tableHeader = tableContainer.querySelector("thead");
-        if (!tableHeader) {
-            tableHeader = document.createElement("thead");
-            const headerRow = document.createElement("tr");
-            const columnHeader1 = document.createElement("th");
-            columnHeader1.textContent = "Jumlah";
-            const columnHeader2 = document.createElement("th");
-            columnHeader2.textContent = "Nama";
-            const columnHeader3 = document.createElement("th");
-            columnHeader3.textContent = "Tipe";
-            const columnHeader4 = document.createElement("th");
-            columnHeader4.textContent = "Harga";
-            const columnHeader5 = document.createElement("th");
-            columnHeader5.textContent = "Aksi"; // Kolom baru untuk tombol hapus
-            headerRow.appendChild(columnHeader1);
-            headerRow.appendChild(columnHeader2);
-            headerRow.appendChild(columnHeader3);
-            headerRow.appendChild(columnHeader4);
-            headerRow.appendChild(columnHeader5); // Tambahkan kolom aksi
-            tableHeader.appendChild(headerRow);
-            tableContainer.appendChild(tableHeader);
+        // Ambil data laporan dari Local Storage atau sumber data lainnya
+        // Di sini, untuk keperluan contoh, ambil dari Local Storage
+        const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+        // Cari laporan dengan kode yang sesuai
+        const report = reports.find((report) => report.code === reportCode);
+
+        // Tampilkan detail laporan
+        if (report) {
+          // Isi detail laporan ke dalam elemen HTML
+          document.getElementById("name").textContent = report.name;
+          document.getElementById("address").textContent = report.address;
+          document.getElementById("itemName").textContent = report.itemName;
+          document.getElementById("brand").textContent = report.brand;
+          document.getElementById("type").textContent = report.type;
+          document.getElementById("complaint").textContent = report.complaint;
+        } else {
+          // Jika laporan tidak ditemukan, tampilkan pesan bahwa laporan tidak ditemukan
+          document.getElementById("name").textContent =
+            "Laporan tidak ditemukan.";
         }
-
-        // Cek apakah tbody sudah ada, jika tidak tambahkan
-        let tableBody = tableContainer.querySelector("tbody");
-        if (!tableBody) {
-            tableBody = document.createElement("tbody");
-            tableContainer.appendChild(tableBody);
-        }
-
-        // Tambahkan baris-baris baru
-        rows.forEach((row) => {
-            // Buat baris baru untuk setiap detail perbaikan
-            const tr = document.createElement("tr");
-            const td1 = document.createElement("td");
-            const input1 = document.createElement("input");
-            input1.setAttribute("type", "text");
-            input1.classList.add(
-                "border",
-                "rounded",
-                "px-4",
-                "py-2",
-                "w-full",
-                "focus:outline-none",
-                "focus:ring",
-                "focus:border-blue-300"
-            );
-            td1.appendChild(input1);
-            tr.appendChild(td1);
-            const td2 = document.createElement("td");
-            const input2 = document.createElement("input");
-            input2.setAttribute("type", "text");
-            input2.classList.add(
-                "border",
-                "rounded",
-                "px-4",
-                "py-2",
-                "w-full",
-                "focus:outline-none",
-                "focus:ring",
-                "focus:border-blue-300"
-            );
-            td2.appendChild(input2);
-            tr.appendChild(td2);
-            const td3 = document.createElement("td");
-            const input3 = document.createElement("input");
-            input3.setAttribute("type", "text");
-            input3.classList.add(
-                "border",
-                "rounded",
-                "px-4",
-                "py-2",
-                "w-full",
-                "focus:outline-none",
-                "focus:ring",
-                "focus:border-blue-300"
-            );
-            td3.appendChild(input3);
-            tr.appendChild(td3);
-            const td4 = document.createElement("td");
-            const input4 = document.createElement("input");
-            input4.setAttribute("type", "text");
-            input4.classList.add(
-                "border",
-                "rounded",
-                "px-4",
-                "py-2",
-                "w-full",
-                "focus:outline-none",
-                "focus:ring",
-                "focus:border-blue-300"
-            );
-            td4.appendChild(input4);
-            tr.appendChild(td4);
-
-            // Tambahkan tombol hapus di kolom baru
-            const td5 = document.createElement("td");
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Hapus";
-            deleteButton.classList.add(
-                "px-4",
-                "py-2",
-                "bg-red-500",
-                "text-white",
-                "rounded-md",
-                "focus:outline-none",
-                "hover:bg-red-600"
-            );
-            deleteButton.addEventListener("click", function () {
-                // Hapus baris saat tombol hapus ditekan
-                tr.remove();
-            });
-            td5.appendChild(deleteButton);
-            tr.appendChild(td5);
-
-            // Tambahkan baris ke dalam tbody
-            tableBody.appendChild(tr);
-        });
-    } else {
-        // Tampilkan pesan jika detail perbaikan kosong
-        swal(
-            "Detail Perbaikan Kosong",
-            "Silakan masukkan detail perbaikan terlebih dahulu",
-            "info"
-        );
-    }
-}
-
-
-
-// Fungsi untuk menyimpan data detail perbaikan ke local storage
-function saveRepairDetail() {
-    const repairDetail = document.getElementById("repairDetail").value.trim();
-    localStorage.setItem("repairDetail", repairDetail);
-}
-
-// Fungsi untuk memuat data detail perbaikan dari local storage saat halaman dimuat
-function loadRepairDetail() {
-    const repairDetail = localStorage.getItem("repairDetail");
-    if (repairDetail) {
-        document.getElementById("repairDetail").value = repairDetail;
-        generateTableDetail(); // Panggil fungsi generateTableDetail untuk menampilkan tabel saat data sudah dimuat
-    }
-}
-
-// Panggil fungsi loadRepairDetail saat halaman dimuat
-window.onload = loadRepairDetail;
-
+      }
     </script>
   </body>
 </html>

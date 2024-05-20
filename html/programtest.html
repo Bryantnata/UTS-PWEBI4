@@ -1,85 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lihat Laporan</title>
-    <script>
-        // Fungsi untuk mencari laporan berdasarkan kode
-        function findReportByCode(reportCode) {
-            // Ambil laporan dari Local Storage
-            const reports = JSON.parse(localStorage.getItem("reports")) || [];
-
-            // Cari laporan dengan kode yang sesuai
-            const foundReport = reports.find(report => report.code === reportCode);
-
-            return foundReport; // Mengembalikan laporan yang ditemukan atau null jika tidak ditemukan
-        }
-
-        // Fungsi untuk menampilkan semua data laporan dalam tabel
-        function displayAllReports() {
-            const reports = JSON.parse(localStorage.getItem("reports")) || [];
-
-            const tableDiv = document.getElementById("allReports");
-
-            if (reports.length > 0) {
-                // Jika terdapat laporan, tampilkan dalam bentuk tabel
-                let tableHTML = `
-                    <h2>Semua Laporan</h2>
-                    <table border="1">
-                        <tr>
-                            <th>Kode Laporan</th>
-                            <th>Tanggal</th>
-                            <th>Nama Pelapor</th>
-                            <th>Alamat</th>
-                            <th>Nama Barang</th>
-                            <th>Merek</th>
-                            <th>Tipe</th>
-                            <th>Keluhan</th>
-                            <th>Status</th>
-                        </tr>
-                `;
-
-                reports.forEach(report => {
-                    tableHTML += `
-                        <tr>
-                            <td>${report.code}</td>
-                            <td>${report.date}</td>
-                            <td>${report.name}</td>
-                            <td>${report.address}</td>
-                            <td>${report.itemName}</td>
-                            <td>${report.brand}</td>
-                            <td>${report.type}</td>
-                            <td>${report.complaint}</td>
-                            <td>${report.status}</td>
-                        </tr>
-                    `;
-                });
-
-                tableHTML += `</table>`;
-                tableDiv.innerHTML = tableHTML;
-            } else {
-                // Jika tidak ada laporan
-                tableDiv.innerHTML = "<p>Tidak ada laporan yang tersedia.</p>";
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Table from Reports</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body>
-    <h1>Lihat Laporan</h1>
-    <label for="kodeLaporan">Masukkan Kode Laporan:</label>
-    <input type="text" id="kodeLaporan" name="kodeLaporan">
-    <button onclick="displayReport()">Tampilkan</button>
+<body class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <label for="reportSelect" class="mr-2 font-bold">Pilih Laporan:</label>
+      <select id="reportSelect" class="border rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-300">
+        <option value="0">Laporan 1</option>
+        <option value="1">Laporan 2</option>
+      </select>
+    </div>
+    <button id="addRowButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+      Tambah Baris
+    </button>
+  </div>
+  <div id="tableContainer" class="mt-4"></div>
 
-    <div id="result"></div>
+  <script>
+    const reports = [
+      {
+        repairDetail: [
+          ["2", "Gear", "Sparepart", "50000"],
+          ["1", "Chain", "Sparepart", "30000"],
+          ["3", "Oil", "Consumable", "15000"]
+        ]
+      },
+      {
+        repairDetail: [
+          ["1", "Brake Pad", "Sparepart", "20000"],
+          ["2", "Clutch", "Sparepart", "45000"]
+        ]
+      }
+    ];
 
-    <hr>
+    const tableContainer = document.getElementById("tableContainer");
 
-    <div id="allReports"></div>
+    function generateTable(reportIndex) {
+      tableContainer.innerHTML = ''; // Clear previous table content
 
-    <script>
-        // Panggil fungsi untuk menampilkan semua laporan saat halaman dimuat
-        displayAllReports();
-    </script>
+      const repairDetail = reports[reportIndex].repairDetail;
+
+      if (repairDetail && repairDetail.length > 0) {
+        // Tambahkan nama kolom
+        const tableHeader = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+        const headers = ["Jumlah", "Nama", "Tipe", "Harga", "Aksi"];
+        headers.forEach(headerText => {
+          const th = document.createElement("th");
+          th.textContent = headerText;
+          headerRow.appendChild(th);
+        });
+        tableHeader.appendChild(headerRow);
+        tableContainer.appendChild(tableHeader);
+
+        const tableBody = document.createElement("tbody");
+
+        // Tambahkan baris-baris baru
+        repairDetail.forEach((row) => {
+          const tr = document.createElement("tr");
+          row.forEach((cellData) => {
+            const td = document.createElement("td");
+            const input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.value = cellData;
+            input.classList.add(
+              "border",
+              "rounded",
+              "px-4",
+              "py-2",
+              "w-full",
+              "focus:outline-none",
+              "focus:ring",
+              "focus:border-blue-300"
+            );
+            td.appendChild(input);
+            tr.appendChild(td);
+          });
+
+          // Tambahkan tombol hapus baris
+          const td5 = document.createElement("td");
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Hapus";
+          deleteButton.classList.add(
+            "bg-red-500",
+            "hover:bg-red-600",
+            "text-white",
+            "font-bold",
+            "py-2",
+            "px-4",
+            "rounded"
+          );
+          deleteButton.addEventListener("click", function () {
+            tr.remove(); // Hapus baris saat tombol hapus ditekan
+
+            // Cek apakah masih ada baris tersisa setelah penghapusan
+            if (tableBody.querySelectorAll("tr").length === 0) {
+              tableHeader.remove();
+            }
+          });
+          td5.appendChild(deleteButton);
+          tr.appendChild(td5);
+
+          // Tambahkan baris ke dalam tabel body
+          tableBody.appendChild(tr);
+        });
+
+        tableContainer.appendChild(tableBody);
+      } else {
+        Swal.fire({
+          title: "Tidak Ada Data",
+          text: "Tidak ada detail perbaikan yang tersedia untuk laporan ini",
+          icon: "info",
+        });
+      }
+    }
+
+    // Generate table from selected report
+    document.getElementById("reportSelect").addEventListener("change", function () {
+      generateTable(this.value);
+    });
+
+    // Add new row to the table
+    document.getElementById("addRowButton").addEventListener("click", function () {
+      const currentReportIndex = document.getElementById("reportSelect").value;
+      const tableBody = tableContainer.querySelector("tbody");
+
+      if (tableBody) {
+        const tr = document.createElement("tr");
+
+        const newRow = ["", "", "", ""];
+        newRow.forEach((cellData) => {
+          const td = document.createElement("td");
+          const input = document.createElement("input");
+          input.setAttribute("type", "text");
+          input.value = cellData;
+          input.classList.add(
+            "border",
+            "rounded",
+            "px-4",
+            "py-2",
+            "w-full",
+            "focus:outline-none",
+            "focus:ring",
+            "focus:border-blue-300"
+          );
+          td.appendChild(input);
+          tr.appendChild(td);
+        });
+
+        const td5 = document.createElement("td");
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Hapus";
+        deleteButton.classList.add(
+          "bg-red-500",
+          "hover:bg-red-600",
+          "text-white",
+          "font-bold",
+          "py-2",
+          "px-4",
+          "rounded"
+        );
+        deleteButton.addEventListener("click", function () {
+          tr.remove();
+
+          if (tableBody.querySelectorAll("tr").length === 0) {
+            tableContainer.querySelector("thead").remove();
+          }
+        });
+        td5.appendChild(deleteButton);
+        tr.appendChild(td5);
+
+        tableBody.appendChild(tr);
+      } else {
+        Swal.fire({
+          title: "Tidak Ada Tabel",
+          text: "Silakan pilih laporan terlebih dahulu untuk menambahkan baris.",
+          icon: "info",
+        });
+      }
+    });
+
+    // Generate table from first report (index 0) on page load
+    window.addEventListener("load", () => generateTable(0));
+  </script>
 </body>
 </html>

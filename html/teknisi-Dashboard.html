@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teknisi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body class="bg-gray-100">
     <!-- Sidebar -->
@@ -66,7 +66,7 @@
           >
             <div>
               <h2 class="text-lg font-semibold mb-2">Barang Masuk</h2>
-              <p id="AngkbrgMasuk" class="text-3xl font-bold text-red-500"></p>
+              <p id="total-laporan" class="text-3xl font-bold text-red-500"></p>
             </div>
           </div>
           <div
@@ -92,7 +92,7 @@
               <h2 class="text-lg font-semibold mb-2">
                 Jumlah Transaksi Hari Ini
               </h2>
-              <p id="AngkTransaksi" class="text-3xl font-bold"></p>
+              <p id="laporan-hari-ini" class="text-3xl font-bold"></p>
               <!-- Hapus text-center dan ganti dengan flex-grow untuk meletakkan teks ke tengah vertikal -->
             </div>
           </div>
@@ -107,7 +107,7 @@
             <div>
               <h2 class="text-lg font-semibold mb-2">On-Proses</h2>
               <!-- Tambahkan text-center untuk mengatur posisi horizontal ke tengah -->
-              <p id="AngkProses" class="text-3xl font-bold text-yellow-500">
+              <p id="sedang-diperbaiki" class="text-3xl font-bold text-yellow-500">
                 235
               </p>
             </div>
@@ -119,7 +119,7 @@
             <div>
               <h2 class="text-lg font-semibold mb-2">Selesai</h2>
               <!-- Tambahkan text-center untuk mengatur posisi horizontal ke tengah -->
-              <p id="AngkSelesai" class="text-3xl font-bold text-blue-800">
+              <p id="selesai-diperbaiki" class="text-3xl font-bold text-blue-800">
                 128
               </p>
             </div>

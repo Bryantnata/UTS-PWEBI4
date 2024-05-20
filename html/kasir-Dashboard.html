@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kasir</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     "></script>
   </head>
   <body class="bg-gray-100">
@@ -83,7 +83,7 @@
           >
             <div>
               <h2 class="text-lg font-semibold mb-2">Barang Masuk</h2>
-              <p id="laporanMasuk" class="text-3xl font-bold text-red-500">2</p>
+              <p id="total-laporan" class="text-3xl font-bold text-red-500"></p>
             </div>
           </div>
           <div
@@ -109,7 +109,7 @@
               <h2 class="text-lg font-semibold mb-2">
                 Jumlah Transaksi Hari Ini
               </h2>
-              <p id="laporanMasukHariIni" class="text-3xl font-bold"></p>
+              <p id="laporan-hari-ini" class="text-3xl font-bold"></p>
               <!-- Hapus text-center dan ganti dengan flex-grow untuk meletakkan teks ke tengah vertikal -->
             </div>
           </div>
@@ -124,8 +124,7 @@
             <div>
               <h2 class="text-lg font-semibold mb-2">On-Proses</h2>
               <!-- Tambahkan text-center untuk mengatur posisi horizontal ke tengah -->
-              <p id="AngkProses" class="text-3xl font-bold text-yellow-500">
-                235
+              <p id="sedang-diperbaiki" class="text-3xl font-bold text-yellow-500">
               </p>
             </div>
           </div>
@@ -136,8 +135,7 @@
             <div>
               <h2 class="text-lg font-semibold mb-2">Selesai</h2>
               <!-- Tambahkan text-center untuk mengatur posisi horizontal ke tengah -->
-              <p id="AngkSelesai" class="text-3xl font-bold text-blue-800">
-                128
+              <p id="selesai-diperbaiki" class="text-3xl font-bold text-blue-800">
               </p>
             </div>
           </div>
@@ -156,10 +154,9 @@
       </div>
       <!-- Daftar Laporan Hari Ini-->
       <div class="mt-8">
-        <h2 class="text-lg font-semibold mb-4">Laporan Hari Ini</h2>
+        <h2 class="text-lg font-semibold mb-4">Notifikasi</h2>
         <div class="overflow-x-auto">
           <table class="w-full bg-white border border-gray-400 rounded-lg">
-            <!-- Menggunakan ID yang sama -->
             <thead>
               <tr class="divide-x divide-gray-400">
                 <th class="px-4 py-2">No</th>
@@ -182,9 +179,7 @@
     <script src="/js/script.js"></script>
     <!-- Panggil fungsi displayReports untuk menampilkan laporan di kasir-dashboard.html -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
         displayReports("dashboard");
-      });
     </script>
   </body>
 </html>
