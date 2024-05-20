@@ -5,6 +5,145 @@ function selectRole(role) {
   window.location.href = "/html/login.html";
 }
 
+// Fungsi untuk menghasilkan tabel
+function generateTable() {
+  // Mendapatkan nilai dari textarea detail perbaikan
+  const repairDetail = document.getElementById("repairDetail").value.trim();
+  if (repairDetail) {
+    // Split setiap baris detail perbaikan
+    const rows = repairDetail.split("\n");
+    const tableContainer = document.getElementById("tableContainer");
+
+    // Hapus judul kolom jika sudah ada
+    const existingHeader = tableContainer.querySelector("thead");
+    if (existingHeader) {
+      existingHeader.remove();
+    }
+
+    // Tambahkan nama kolom
+    const tableHeader = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    const columnHeader1 = document.createElement("th");
+    columnHeader1.textContent = "Jumlah";
+    const columnHeader2 = document.createElement("th");
+    columnHeader2.textContent = "Nama";
+    const columnHeader3 = document.createElement("th");
+    columnHeader3.textContent = "Tipe";
+    const columnHeader4 = document.createElement("th");
+    columnHeader4.textContent = "Harga";
+    const columnHeader5 = document.createElement("th"); // Kolom untuk tombol hapus baris
+    columnHeader5.textContent = "Aksi"; // Nama kolom untuk tombol aksi
+    headerRow.appendChild(columnHeader1);
+    headerRow.appendChild(columnHeader2);
+    headerRow.appendChild(columnHeader3);
+    headerRow.appendChild(columnHeader4);
+    headerRow.appendChild(columnHeader5); // Menambahkan kolom aksi
+    tableHeader.appendChild(headerRow);
+    tableContainer.appendChild(tableHeader);
+
+    // Tambahkan baris-baris baru
+    rows.forEach((row) => {
+      // Buat baris baru untuk setiap detail perbaikan
+      const tr = document.createElement("tr");
+      const td1 = document.createElement("td");
+      const input1 = document.createElement("input");
+      input1.setAttribute("type", "text");
+      input1.classList.add(
+        "border",
+        "rounded",
+        "px-4",
+        "py-2",
+        "w-full",
+        "focus:outline-none",
+        "focus:ring",
+        "focus:border-blue-300"
+      );
+      td1.appendChild(input1);
+      tr.appendChild(td1);
+      const td2 = document.createElement("td");
+      const input2 = document.createElement("input");
+      input2.setAttribute("type", "text");
+      input2.classList.add(
+        "border",
+        "rounded",
+        "px-4",
+        "py-2",
+        "w-full",
+        "focus:outline-none",
+        "focus:ring",
+        "focus:border-blue-300"
+      );
+      td2.appendChild(input2);
+      tr.appendChild(td2);
+      const td3 = document.createElement("td");
+      const input3 = document.createElement("input");
+      input3.setAttribute("type", "text");
+      input3.classList.add(
+        "border",
+        "rounded",
+        "px-4",
+        "py-2",
+        "w-full",
+        "focus:outline-none",
+        "focus:ring",
+        "focus:border-blue-300"
+      );
+      td3.appendChild(input3);
+      tr.appendChild(td3);
+      const td4 = document.createElement("td");
+      const input4 = document.createElement("input");
+      input4.setAttribute("type", "text");
+      input4.classList.add(
+        "border",
+        "rounded",
+        "px-4",
+        "py-2",
+        "w-full",
+        "focus:outline-none",
+        "focus:ring",
+        "focus:border-blue-300"
+      );
+      td4.appendChild(input4);
+      tr.appendChild(td4);
+
+      // Tambahkan tombol hapus baris
+      const td5 = document.createElement("td");
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Hapus";
+      deleteButton.classList.add(
+        "bg-red-500",
+        "hover:bg-red-600",
+        "text-white",
+        "font-bold",
+        "py-2",
+        "px-4",
+        "rounded"
+      );
+      deleteButton.addEventListener("click", function () {
+        tr.remove(); // Hapus baris saat tombol hapus ditekan
+
+        // Cek apakah masih ada baris tersisa setelah penghapusan
+        if (tableContainer.querySelectorAll("tbody tr").length === 0) {
+          // Jika tidak ada, hapus judul kolom juga
+          tableHeader.remove();
+        }
+      });
+      td5.appendChild(deleteButton);
+      tr.appendChild(td5);
+
+      // Tambahkan baris ke dalam tabel
+      tableContainer.appendChild(tr);
+    });
+  } else {
+    // Tampilkan pesan jika detail perbaikan kosong
+    Swal.fire({
+      title: "Detail Perbaikan Kosong",
+      text: "Silakan masukkan detail perbaikan terlebih dahulu",
+      icon: "info",
+    });
+  }
+}
+
 // Event listener yang dipanggil ketika dokumen telah dimuat sepenuhnya
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.forms["loginForm"];
@@ -13,22 +152,17 @@ document.addEventListener("DOMContentLoaded", function () {
     loginForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      // Panggil fungsi validasi form login
-      if (validateLoginForm()) {
-        const id = document.getElementById("id").value;
-        const password = document.getElementById("password").value;
+      const id = document.getElementById("id").value;
+      const password = document.getElementById("password").value;
 
-        if (id === "admin" && password === "admin") {
-          const role = sessionStorage.getItem("selectedRole");
-          if (role === "kasir") {
-            window.location.href = "/html/kasir-Dashboard.html";
-          } else if (role === "teknisi") {
-            window.location.href = "/html/teknisi-Dashboard.html";
-          } else {
-            alert("Role tidak valid");
-          }
+      if (id === "admin" && password === "admin") {
+        const role = sessionStorage.getItem("selectedRole");
+        if (role === "kasir") {
+          window.location.href = "/html/kasir-Dashboard.html";
+        } else if (role === "teknisi") {
+          window.location.href = "/html/teknisi-Dashboard.html";
         } else {
-          alert("ID atau Password salah!");
+          alert("Role tidak valid");
         }
       }
     });
@@ -39,13 +173,19 @@ document.addEventListener("DOMContentLoaded", function () {
   if (logoutButton) {
     logoutButton.addEventListener("click", function (event) {
       event.preventDefault(); // Mencegah aksi default dari anchor tag
-      swal({
+
+      // Tampilkan sweetalert2 dialog
+      Swal.fire({
         title: "Apakah kamu yakin ingin keluar?",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willLogout) => {
-        if (willLogout) {
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, keluar",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Jika pengguna menekan tombol "Ya, keluar", arahkan ke halaman index.html
           window.location.href = "/index.html";
         }
       });
@@ -55,66 +195,180 @@ document.addEventListener("DOMContentLoaded", function () {
   // Panggil fungsi displayReports saat halaman dimuat
   const transaksiList = document.getElementById("transaksiList");
   if (transaksiList) {
-    displayReports("transaksi");
+    transaksiList.innerHTML = "";
+    displayReports();
   }
-
-  // Call the function when the page is loaded
-  handleSidebarButtons();
 
   // Also call handleSidebarButtons() when navigation occurs
   window.addEventListener("popstate", handleSidebarButtons);
 
+  const searchButton = document.getElementById("searchBtn"); // Ubah id tombol pencarian
+  if (searchButton) {
+    // Tambahkan event listener untuk tombol pencarian
+    searchButton.addEventListener("click", function () {
+      // Dapatkan nilai kode laporan yang dimasukkan pengguna
+      const reportCode = document.getElementById("searchRowIndex").value;
+
+      // Panggil fungsi untuk mencari laporan berdasarkan kode laporan
+      searchReportByReportCode(reportCode);
+    });
+  }
+
+  // Fungsi untuk mencari laporan berdasarkan kode laporan
+  function searchReportByReportCode(code) {
+    const reports = JSON.parse(localStorage.getItem("reports")) || [];
+    const filteredReports = reports.filter((report) => report.code === code);
+
+    if (filteredReports.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Laporan tidak ditemukan.",
+      });
+      return;
+    }
+
+    // Ambil referensi ke tabel laporan
+    const reportTable = document.getElementById("reportTable");
+    const tbody = reportTable.querySelector("tbody");
+
+    // Kosongkan isi tabel sebelum menambahkan hasil pencarian
+    tbody.innerHTML = "";
+
+    // Tambahkan laporan yang ditemukan ke dalam tabel
+    filteredReports.forEach((report) => {
+      const row = document.createElement("tr");
+      Object.values(report).forEach((value) => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+      tbody.appendChild(row);
+    });
+  }
+
   // Ambil elemen input dan tombol delete
-  const deleteButton = document.getElementById("deleteBtn");
+  const deleteButton = document.getElementById("deleteBtn"); // Ubah id tombol
   if (deleteButton) {
+    // Tambahkan event listener untuk tombol delete
     deleteButton.addEventListener("click", function () {
+      // Dapatkan nilai kode laporan yang dimasukkan pengguna
       const reportCode = document.getElementById("deleteRowIndex").value;
+
+      // Panggil fungsi untuk menghapus laporan berdasarkan kode laporan
       deleteReportByReportCode(reportCode);
     });
   }
 
+  // Fungsi untuk menghapus laporan berdasarkan kode laporan
+  function deleteReportByReportCode(code) {
+    const reports = JSON.parse(localStorage.getItem("reports")) || [];
+    const updatedReports = reports.filter((report) => report.code !== code);
+
+    if (updatedReports.length === reports.length) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Laporan tidak ditemukan.",
+      });
+      return;
+    }
+
+    localStorage.setItem("reports", JSON.stringify(updatedReports));
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: "Laporan berhasil dihapus.",
+    }).then(() => {
+      location.reload();
+    });
+  }
+
+  // Ambil elemen button "Hapus Semua Data"
   const deleteAllBtn = document.getElementById("deleteAllBtn");
   if (deleteAllBtn) {
+    // Tambahkan event listener untuk tombol "Hapus Semua Data"
     deleteAllBtn.addEventListener("click", function () {
+      // Cek apakah ada data yang tersimpan di Local Storage
       const reports = JSON.parse(localStorage.getItem("reports"));
       if (!reports || reports.length === 0) {
-        swal("Info", "Tidak ada data yang tersimpan.", "info");
+        // Jika tidak ada data yang tersimpan, tampilkan pesan bahwa tidak ada data yang bisa dihapus
+        Swal.fire("Info", "Tidak ada data yang tersimpan.", "info");
       } else {
-        swal({
+        // Jika ada data yang tersimpan, tampilkan pop-up untuk memasukkan password admin
+        Swal.fire({
           title: "Konfirmasi",
           text: "Masukkan password untuk menghapus semua data:",
           icon: "info",
-          content: {
-            element: "input",
-            attributes: {
-              type: "password",
-              placeholder: "Password",
-            },
+          input: "password",
+          inputAttributes: {
+            placeholder: "Password",
+            type: "password",
           },
-          buttons: {
-            cancel: "Batal",
-            confirm: {
-              text: "Hapus",
-              closeModal: false,
-            },
-          },
-        }).then((password) => {
-          if (password === "admin") {
-            localStorage.removeItem("reports");
-            swal("Success!", "Semua data berhasil dihapus.", "success").then(
-              () => {
+          showCancelButton: true,
+          confirmButtonText: "Hapus",
+          cancelButtonText: "Batal",
+          preConfirm: (password) => {
+            // Validasi password admin
+            if (password === "admin") {
+              // Hapus semua data dari Local Storage
+              localStorage.removeItem("reports");
+              // Tampilkan pesan sukses setelah data dihapus
+              return Swal.fire(
+                "Success!",
+                "Semua data berhasil dihapus.",
+                "success"
+              ).then(() => {
+                // Muat ulang halaman untuk menyegarkan tampilan
                 location.reload();
-              }
-            );
-          } else if (password === null) {
-            // Jika pengguna menekan tombol "Batal", tidak melakukan apa-apa
-          } else {
-            swal("Error!", "Password tidak valid.", "error");
-          }
+              });
+            } else {
+              // Tampilkan pesan kesalahan jika password admin tidak valid
+              Swal.showValidationMessage("Password tidak valid.");
+              return false;
+            }
+          },
         });
       }
     });
   }
+
+  function loadReportDetails() {
+    // Ambil kode laporan dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const reportCode = urlParams.get("code");
+
+    // Ambil data laporan dari Local Storage atau sumber data lainnya
+    // Di sini, untuk keperluan contoh, ambil dari Local Storage
+    const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+    // Cari laporan dengan kode yang sesuai
+    const report = reports.find((report) => report.code === reportCode);
+
+    // Tampilkan detail laporan
+    if (report) {
+      // Isi detail laporan ke dalam elemen HTML
+      document.getElementById("name").textContent = report.name;
+      document.getElementById("address").textContent = report.address;
+      document.getElementById("itemName").textContent = report.itemName;
+      document.getElementById("brand").textContent = report.brand;
+      document.getElementById("type").textContent = report.type;
+      document.getElementById("complaint").textContent = report.complaint;
+      document.getElementById("repairDetail").textContent = report.repairDetail;
+    } else {
+      // Jika laporan tidak ditemukan, tampilkan pesan bahwa laporan tidak ditemukan
+      document.getElementById("name").textContent = "Laporan tidak ditemukan.";
+    }
+  }
+
+  // Tambahkan event listener untuk tombol yang memanggil generateTable
+  const generateTableButton = document.getElementById("generateTableBtn");
+  if (generateTableButton) {
+    generateTableButton.addEventListener("click", generateTable);
+  }
+
+  // Setelah halaman baru dimuat, panggil kembali handleSidebarButtons()
+  window.addEventListener("load", handleSidebarButtons);
 });
 
 function tambahBtn() {
@@ -152,13 +406,13 @@ function goBack() {
 }
 
 // Fungsi untuk memvalidasi form login
-function validateLoginForm() {
-  const id = document.getElementById("id").value;
-  const password = document.getElementById("password").value;
+function validateForm() {
+  var id = document.getElementById("id").value;
+  var password = document.getElementById("password").value;
 
-  const idError = document.getElementById("id-error");
-  const passwordError = document.getElementById("password-error");
-  const commonError = document.getElementById("common-error");
+  var idError = document.getElementById("id-error");
+  var passwordError = document.getElementById("password-error");
+  var commonError = document.getElementById("common-error");
 
   idError.innerHTML = "";
   passwordError.innerHTML = "";
@@ -180,44 +434,82 @@ function validateLoginForm() {
     return false;
   }
 
+  if (id !== "admin") {
+    idError.innerHTML = "ID tidak valid!";
+    document.getElementById("id").value = "";
+    document.getElementById("password").value = "";
+    return false;
+  }
+
+  if (password !== "admin") {
+    passwordError.innerHTML = "Password tidak valid!";
+    document.getElementById("password").value = "";
+    return false;
+  }
   return true;
 }
 
 // Fungsi untuk menampilkan tabel hasil submit
 function displayReports(location) {
-  const reports = JSON.parse(localStorage.getItem("reports"));
-  let table;
+  // Ambil data dari Local Storage
+  var reports = JSON.parse(localStorage.getItem("reports"));
+  var table;
 
-  let totalLaporanMasuk = 0;
-  let laporanHariIni = 0;
+  // Variabel untuk menyimpan jumlah laporan yang masuk hari ini
+  var totalLaporanMasuk = 0;
+  var laporanHariIni = 0;
 
+  // Variabel untuk menyimpan jumlah laporan yang sedang diperbaiki
+  var sedangDiperbaikiCount = 0;
+
+  // Variabel untuk menyimpan jumlah laporan yang selesai diperbaiki
+  var selesaiDiperbaikiCount = 0;
+
+  var today = new Date().toLocaleDateString();
+
+  // Tentukan elemen tabel berdasarkan lokasi
   if (location === "dashboard") {
-    table = document.getElementById("notifikasiList");
+    table = document.getElementById("notifikasiList"); // Menggunakan ID notifikasiList untuk kasir-dashboard.html
   } else if (location === "transaksi") {
-    table = document.getElementById("transaksiList");
+    table = document.getElementById("transaksiList"); // Menggunakan ID transaksiList untuk kasir-transaksi.html
   } else if (location === "teknisi-laporan") {
-    table = document.getElementById("laporanList");
+    table = document.getElementById("laporanList"); // Menggunakan ID laporanList untuk teknisi-laporan.html
   }
 
+  // Bersihkan isi tabel sebelum menampilkan data baru
   if (table) {
     table.innerHTML = "";
+    // Tambahkan kelas border-collapse ke elemen tabel
     table.classList.add("border-collapse");
 
+    // Cek apakah ada data
     if (reports && reports.length > 0) {
-      reports.forEach(function (report, index) {
-        const row = table.insertRow();
+      // Sort reports by last modified date descending
+      reports.sort(
+        (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
+      );
 
-        const indexCell = row.insertCell(0);
-        indexCell.textContent = index + 1;
+      // Limit to maximum 10 reports for notifikasiList
+      const limitedReports =
+        location === "dashboard" ? reports.slice(0, 10) : reports;
+
+      limitedReports.forEach(function (report, index) {
+        // Buat baris baru untuk setiap laporan
+        var row = table.insertRow();
+
+        // Isi kolom nomor urut
+        var indexCell = row.insertCell(0);
+        indexCell.textContent = index + 1; // Nomor urut dimulai dari 1
         indexCell.classList.add(
           "border",
           "border-gray-400",
           "px-4",
           "py-2",
           "text-center"
-        );
+        ); // Tambahkan kelas border dengan ketebalan 1px
 
-        const dateCell = row.insertCell(1);
+        // Isi kolom lainnya
+        var dateCell = row.insertCell(1);
         dateCell.textContent = report.date;
         dateCell.classList.add(
           "border",
@@ -227,7 +519,7 @@ function displayReports(location) {
           "text-center"
         );
 
-        const codeCell = row.insertCell(2);
+        var codeCell = row.insertCell(2);
         codeCell.textContent = report.code;
         codeCell.classList.add(
           "border",
@@ -237,15 +529,27 @@ function displayReports(location) {
           "text-center"
         );
 
-        const ownerCell = row.insertCell(3);
-        ownerCell.textContent = report.name;
-        ownerCell.classList.add("border", "border-gray-400", "px-4", "py-2");
+        var nameCell = row.insertCell(3);
+        nameCell.textContent = report.name;
+        nameCell.classList.add(
+          "border",
+          "border-gray-400",
+          "px-4",
+          "py-2",
+          "text-center"
+        );
 
-        const typeCell = row.insertCell(4);
+        var typeCell = row.insertCell(4);
         typeCell.textContent = report.type;
-        typeCell.classList.add("border", "border-gray-400", "px-4", "py-2");
+        typeCell.classList.add(
+          "border",
+          "border-gray-400",
+          "px-4",
+          "py-2",
+          "text-center"
+        );
 
-        const statusCell = row.insertCell(5);
+        var statusCell = row.insertCell(5);
         statusCell.textContent = report.status;
         statusCell.classList.add(
           "border",
@@ -258,40 +562,48 @@ function displayReports(location) {
         // Tambahkan tombol "Edit" hanya untuk tabel teknisi-laporan
         if (location === "teknisi-laporan") {
           const actionCell = row.insertCell(6);
-          const editButton = document.createElement("button");
-          editButton.textContent = "Edit";
-          editButton.classList.add(
+          const editLink = document.createElement("a");
+          editLink.textContent = "Edit";
+          editLink.href = "/html/detail.html?code=" + report.code; // Mengatur href sesuai dengan URL yang diinginkan
+          editLink.classList.add(
             "editBtn",
+            "style-bold",
             "rounded-full",
-            "bg-blue-500",
-            "text-white",
+            "text-yellow-600", // Mengatur warna tulisan menjadi kuning
             "px-7",
             "py-2",
+            "font-bold",
             "text-center",
-            "justify-center"
+            "flex", // Menambahkan kelas flex
+            "justify-center" // Menambahkan kelas justify-center
           );
-          editButton.addEventListener("click", function () {
-            // Logika untuk menangani aksi edit
-            // Misalnya, redirect ke halaman edit dengan mengirimkan kode laporan sebagai parameter
-            const reportCode = report.code;
-            window.location.href = "/html/detail.html?code=" + reportCode;
-          });
-          actionCell.appendChild(editButton);
+
+          actionCell.appendChild(editLink);
         }
 
-        actionCell.classList.add(
-          "border",
-          "border-gray-400",
-          "px-4",
-          "py-2",
-          "text-center"
-        );
+        // Atur warna latar belakang dan gaya teks untuk status
+        if (report.status === "Belum Diperbaiki") {
+          statusCell.classList.add("bg-red-800", "text-white", "font-bold");
+        } else if (report.status === "Sedang Diperbaiki") {
+          statusCell.classList.add("bg-orange-700", "text-white", "font-bold");
+          sedangDiperbaikiCount++;
+        } else if (report.status === "Selesai Diperbaiki") {
+          statusCell.classList.add("bg-green-700", "text-white", "font-bold");
+          selesaiDiperbaikiCount++;
+        }
+
+        // Hitung laporan yang masuk hari ini
+        if (report.date === today) {
+          laporanHariIni++;
+        }
+        totalLaporanMasuk++;
       });
     } else {
-      const row = table.insertRow();
-      const cell = row.insertCell(0);
-      cell.textContent = "Tidak ada laporan yang tersedia.";
+      // Tampilkan pesan jika tidak ada laporan
+      var row = table.insertRow();
+      var cell = row.insertCell(0);
       cell.colSpan = 6;
+      cell.textContent = "Tidak ada laporan yang ditemukan.";
       cell.classList.add(
         "border",
         "border-gray-400",
@@ -300,23 +612,29 @@ function displayReports(location) {
         "text-center"
       );
     }
-    totalLaporanMasuk++;
-
-    const currentDate = new Date();
-    const reportDate = new Date(report.date);
-    if (currentDate.toDateString() === reportDate.toDateString()) {
-      laporanHariIni++;
-    }
   }
 
-  const laporanMasuk = document.getElementById("laporanMasuk");
-  if (laporanMasuk) {
-    laporanMasuk.textContent = totalLaporanMasuk;
+  // Tampilkan total laporan di halaman dashboard
+  var totalLaporanElem = document.getElementById("total-laporan");
+  if (totalLaporanElem) {
+    totalLaporanElem.textContent = totalLaporanMasuk;
   }
 
-  const laporanMasukHariIni = document.getElementById("laporanMasukHariIni");
-  if (laporanMasukHariIni) {
-    laporanMasukHariIni.textContent = laporanHariIni;
+  var laporanHariIniElem = document.getElementById("laporan-hari-ini");
+  if (laporanHariIniElem) {
+    laporanHariIniElem.textContent = laporanHariIni;
+  }
+
+  // Tampilkan jumlah laporan yang sedang diperbaiki
+  var sedangDiperbaikiElem = document.getElementById("sedang-diperbaiki");
+  if (sedangDiperbaikiElem) {
+    sedangDiperbaikiElem.textContent = sedangDiperbaikiCount;
+  }
+
+  // Tampilkan jumlah laporan yang selesai diperbaiki
+  var selesaiDiperbaikiElem = document.getElementById("selesai-diperbaiki");
+  if (selesaiDiperbaikiElem) {
+    selesaiDiperbaikiElem.textContent = selesaiDiperbaikiCount;
   }
 }
 
@@ -331,6 +649,104 @@ if (reportDetails) {
   document.getElementById("brand").innerText = reportDetails.brand;
   document.getElementById("type").innerText = reportDetails.type;
   document.getElementById("complaint").innerText = reportDetails.complaint;
+}
+
+function perbaiki() {
+  // Ambil kode laporan dari URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const reportCode = urlParams.get("code");
+
+  // Ambil data laporan dari Local Storage atau sumber data lainnya
+  // Di sini, untuk keperluan contoh, ambil dari Local Storage
+  let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+  // Cari laporan dengan kode yang sesuai
+  const reportIndex = reports.findIndex((report) => report.code === reportCode);
+
+  // Periksa apakah laporan ditemukan
+  if (reportIndex !== -1) {
+    // Perbarui status laporan menjadi "Sedang Diperbaiki"
+    reports[reportIndex].status = "Sedang Diperbaiki";
+
+    // Simpan perubahan kembali ke Local Storage
+    localStorage.setItem("reports", JSON.stringify(reports));
+
+    // Redirect atau lakukan tindakan lainnya setelah perbaikan dilakukan
+    // Misalnya, arahkan kembali ke halaman teknisi-laporan.html
+    window.location.href = "/html/teknisi-laporan.html";
+  } else {
+    // Tampilkan pesan bahwa laporan tidak ditemukan
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Laporan tidak ditemukan.",
+    });
+  }
+}
+
+function selesai() {
+  // Ambil detail perbaikan dari input
+  const repairDetail = document.getElementById("repairDetail").value.trim();
+
+  // Jika detail perbaikan tidak kosong
+  if (repairDetail !== "") {
+    // Tampilkan pesan konfirmasi
+    Swal.fire({
+      title: "Yakin selesai perbaiki?",
+      text: "Anda yakin sudah menyelesaikan perbaikan dan ingin melanjutkan?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, selesai",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Ambil kode laporan dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const reportCode = urlParams.get("code");
+
+        // Ambil data laporan dari Local Storage atau sumber data lainnya
+        // Di sini, untuk keperluan contoh, ambil dari Local Storage
+        let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+        // Cari laporan dengan kode yang sesuai
+        const reportIndex = reports.findIndex(
+          (report) => report.code === reportCode
+        );
+
+        // Periksa apakah laporan ditemukan
+        if (reportIndex !== -1) {
+          // Perbarui status laporan menjadi "Selesai Diperbaiki"
+          reports[reportIndex].status = "Selesai Diperbaiki";
+
+          // Simpan detail perbaikan ke laporan
+          reports[reportIndex].repairDetail = repairDetail;
+
+          // Simpan perubahan kembali ke Local Storage
+          localStorage.setItem("reports", JSON.stringify(reports));
+
+          // Redirect atau lakukan tindakan lainnya setelah perbaikan selesai dilakukan
+          // Misalnya, arahkan kembali ke halaman teknisi-laporan.html
+          window.location.href = "/html/teknisi-laporan.html";
+        } else {
+          // Tampilkan pesan bahwa laporan tidak ditemukan
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Laporan tidak ditemukan.",
+          });
+        }
+      }
+    });
+  } else {
+    // Tampilkan pesan bahwa detail perbaikan belum diisi
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Detail perbaikan belum diisi.",
+    });
+  }
 }
 
 // Fungsi untuk memeriksa apakah tanggal adalah hari ini
@@ -348,30 +764,24 @@ function goToReport() {
   window.location.href = "/html/laporan.html";
 }
 
-// Fungsi untuk membuat kode laporan berdasarkan tanggal dan urutan submit
-function generateReportCode(date, reports) {
+// Fungsi untuk membuat kode primary key
+function generateReportCode(date) {
   const day = ("0" + date.getDate()).slice(-2); // Mendapatkan tanggal dalam format DD
   const month = ("0" + (date.getMonth() + 1)).slice(-2); // Mendapatkan bulan dalam format MM
   const year = date.getFullYear().toString().slice(-2); // Mendapatkan tahun dalam format YY
+  const hours = ("0" + date.getHours()).slice(-2); // Mendapatkan jam dalam format HH
+  const minutes = ("0" + date.getMinutes()).slice(-2); // Mendapatkan menit dalam format MM
+  const seconds = ("0" + date.getSeconds()).slice(-2); // Mendapatkan detik dalam format SS
 
-  // Mendapatkan jumlah laporan pada tanggal yang sama
-  const count =
-    reports.filter((report) => {
-      const reportDate = new Date(report.date);
-      return (
-        reportDate.getDate() === date.getDate() &&
-        reportDate.getMonth() === date.getMonth() &&
-        reportDate.getFullYear() === date.getFullYear()
-      );
-    }).length + 1;
+  // Gabungkan tanggal dan waktu untuk membuat kode unik
+  const reportCode = `${year}${month}${day}${hours}${minutes}${seconds}`;
 
-  // Menggabungkan tanggal, bulan, tahun, dan urutan submit untuk membuat kode
-  const code = `${day}${month}${year}${("0" + count).slice(-2)}`;
-  return code;
+  return reportCode;
 }
 
 // Fungsi untuk menyimpan laporan ke Local Storage
 function saveReportToLocalStorage(reportCode) {
+  // Ambil nilai dari input form
   const name = document.getElementById("name").value;
   const address = document.getElementById("address").value;
   const itemName = document.getElementById("itemName").value;
@@ -379,11 +789,14 @@ function saveReportToLocalStorage(reportCode) {
   const type = document.getElementById("type").value;
   const complaint = document.getElementById("complaint").value;
 
+  // Ambil tanggal saat ini dan format sesuai preferensi
   const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString();
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("id-ID", options);
 
+  // Buat objek laporan
   const report = {
-    code: reportCode,
+    code: reportCode, // Tambahkan kode laporan
     date: formattedDate,
     name: name,
     address: address,
@@ -391,14 +804,17 @@ function saveReportToLocalStorage(reportCode) {
     brand: brand,
     type: type,
     complaint: complaint,
-    status: "Belum diperbaiki",
+    status: "Belum Diperbaiki", // Status default
   };
 
+  // Ambil laporan yang sudah ada di Local Storage atau inisialisasi array kosong jika belum ada
   const reports = JSON.parse(localStorage.getItem("reports")) || [];
-  reports.push(report);
-  localStorage.setItem("reports", JSON.stringify(reports));
 
-  console.log("Data tersimpan:", reports); // Tambahkan log ini
+  // Tambahkan laporan baru ke array laporan
+  reports.push(report);
+
+  // Simpan array laporan ke Local Storage
+  localStorage.setItem("reports", JSON.stringify(reports));
 }
 
 // Fungsi untuk menyimpan laporan
@@ -418,18 +834,30 @@ function submitReport() {
       // Simpan data ke Local Storage
       saveReportToLocalStorage(reportCode);
       // Tampilkan pesan sukses
-      swal("Success!", "Laporan berhasil disimpan.", "success").then(() => {
+      Swal.fire({
+        title: "Success!",
+        text: "Laporan berhasil disimpan.",
+        icon: "success",
+      }).then(() => {
         // Redirect ke halaman dashboard.html setelah pengguna menekan OK pada pesan sukses
         window.location.href = "/html/kasir-Dashboard.html";
       });
       // Di sini bisa dilakukan penyimpanan data ke server atau local storage
     } else {
-      // Jika ada data yang tidak valid, tampilkan pesan error
-      swal("Error!", "Mohon isi data dengan benar.", "error");
+      // Jika ada data yang tidak valid, tampilkan pesan error menggunakan SweetAlert2
+      Swal.fire({
+        title: "Error!",
+        text: "Mohon isi data dengan benar.",
+        icon: "error",
+      });
     }
   } else {
-    // Jika ada input yang kosong, tampilkan pesan error
-    swal("Error!", "Mohon lengkapi semua data.", "error");
+    // Jika ada input yang kosong, tampilkan pesan error menggunakan SweetAlert2
+    Swal.fire({
+      title: "Error!",
+      text: "Mohon lengkapi semua data.",
+      icon: "error",
+    });
   }
 }
 
@@ -457,17 +885,33 @@ function validateData() {
   return true;
 }
 
-// Fungsi untuk meng-handle tombol sidebar
+/// Function to handle sidebar button behavior
 function handleSidebarButtons() {
-  const sidebarButtons = document.querySelectorAll("#sidebar a");
-  sidebarButtons.forEach((button) => {
-    button.addEventListener("click", function (event) {
-      sidebarButtons.forEach((btn) =>
-        btn.classList.remove("bg-gray-100", "dark:bg-gray-800")
-      );
-      this.classList.add("bg-gray-100", "dark:bg-gray-800");
+  // Get the sidebar buttons
+  const buttons = document.querySelectorAll(".sidebar button");
+
+  // Loop through each button and add event listener
+  buttons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      // Remove active class from all buttons
+      buttons.forEach((btn) => btn.classList.remove("active"));
+
+      // Add active class to the clicked button
+      event.target.classList.add("active");
+
+      // Optionally, you can store the active button's state in localStorage or sessionStorage
+      sessionStorage.setItem("activeSidebarButton", event.target.id);
     });
   });
+
+  // On page load, set the active button based on stored state
+  const activeButtonId = sessionStorage.getItem("activeSidebarButton");
+  if (activeButtonId) {
+    const activeButton = document.getElementById(activeButtonId);
+    if (activeButton) {
+      activeButton.classList.add("active");
+    }
+  }
 }
 
 function clearForm() {
@@ -477,24 +921,3 @@ function clearForm() {
     form.reset();
   }
 }
-
-// Fungsi untuk menghapus laporan berdasarkan kode laporan
-function deleteReportByReportCode(reportCode) {
-  const reports = JSON.parse(localStorage.getItem("reports")) || [];
-  const updatedReports = reports.filter(
-    (report) => report.reportCode !== reportCode
-  );
-
-  if (updatedReports.length === reports.length) {
-    swal("Error!", "Laporan tidak ditemukan.", "error");
-    return;
-  }
-
-  localStorage.setItem("reports", JSON.stringify(updatedReports));
-  swal("Success!", "Laporan berhasil dihapus.", "success").then(() => {
-    location.reload();
-  });
-}
-
-// Setelah halaman baru dimuat, panggil kembali handleSidebarButtons()
-window.addEventListener("load", handleSidebarButtons);
