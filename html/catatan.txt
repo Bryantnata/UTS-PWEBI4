@@ -1,0 +1,4 @@
+samakan id antara dashboard tenisi kasir
+atur tabel agar descen tglnya
+atur tabel dashboard agar menampilkan maximal 5 
+warnain status
