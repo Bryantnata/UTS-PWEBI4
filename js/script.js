@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (role === "teknisi") {
           window.location.href = "/html/teknisi-Dashboard.html";
         } else if (role === "admin") {
-          window.location.href = "/html/admin-Dashboard.html";
+          window.location.href = "/html/admin-Dashboard";
         } else {
           alert("Role tidak valid");
         }

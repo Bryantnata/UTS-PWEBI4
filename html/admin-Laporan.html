@@ -22,7 +22,7 @@
         <ul>
           <li>
             <a
-              href="/html/teknisi-Dashboard.html"
+              href="/html/admin-Dashboard.html"
               class="block py-2 px-4 hover:bg-gray-700 active:bg-blue-500"
               id="dashboardBtn"
               >Dashboard</a
@@ -30,18 +30,34 @@
           </li>
           <li>
             <a
-              href="/html/teknisi-laporan.html"
+              href="/html/admin-Transaksi.html"
               class="block py-2 px-4 hover:bg-gray-700"
               id="transaksiBtn"
-              >Laporan</a
+              >Transaksi</a
             >
           </li>
           <li>
             <a
-              href="/html/teknisi-riwayat.html"
+              href="/html/admin-Pembayaran.html"
               class="block py-2 px-4 hover:bg-gray-700"
               id="pembayaranBtn"
+              >Pembayaran</a
+            >
+          </li>
+          <li>
+            <a
+              href="/html/admin-riwayat.html"
+              class="block py-2 px-4 hover:bg-gray-700"
+              id="riwayatBtn"
               >Riwayat</a
+            >
+          </li>
+          <li>
+            <a
+              href="/html/admin-Akun.html"
+              class="block py-2 px-4 hover:bg-gray-700"
+              id="akunBtn"
+              >Akun</a
             >
           </li>
         </ul>
@@ -77,8 +93,11 @@
               <th class="px-4 py-2 border border-gray-400">Status</th>
               <th class="px-4 py-2 border border-gray-400">Edit</th>
             </tr>
-          </thead>          
-          <tbody id="laporanList" class="rounded-full items-center justify-center">
+          </thead>
+          <tbody
+            id="laporanList"
+            class="rounded-full items-center justify-center"
+          >
             <!-- Data transaksi akan ditampilkan di sini -->
           </tbody>
         </table>
