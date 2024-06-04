@@ -161,6 +161,8 @@ document.addEventListener("DOMContentLoaded", function () {
           window.location.href = "/html/kasir-Dashboard.html";
         } else if (role === "teknisi") {
           window.location.href = "/html/teknisi-Dashboard.html";
+        } else if (role === "admin") {
+          window.location.href = "/html/admin-Dashboard.html";
         } else {
           alert("Role tidak valid");
         }
