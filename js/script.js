@@ -262,8 +262,45 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  / Ambil elemen input dan tombol delete
+  const deleteButton = document.getElementById("deleteBtnRiwayat"); // Ubah id tombol
+  if (deleteButton) {
+    // Tambahkan event listener untuk tombol delete
+    deleteButton.addEventListener("click", function () {
+      // Dapatkan nilai kode laporan yang dimasukkan pengguna
+      const reportCode = document.getElementById("deleteRiwayatRowIndex").value;
+
+      // Panggil fungsi untuk menghapus laporan berdasarkan kode laporan
+      deleteReportByReportCodeRIwayat(reportCode);
+    });
+  }
+
   // Fungsi untuk menghapus laporan berdasarkan kode laporan
   function deleteReportByReportCode(code) {
+    const reports = JSON.parse(localStorage.getItem("reports")) || [];
+    const updatedReports = reports.filter((report) => report.code !== code);
+
+    if (updatedReports.length === reports.length) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Laporan tidak ditemukan.",
+      });
+      return;
+    }
+
+    localStorage.setItem("reports", JSON.stringify(updatedReports));
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: "Laporan berhasil dihapus.",
+    }).then(() => {
+      location.reload();
+    });
+  }
+
+  // Fungsi untuk menghapus laporan berdasarkan kode laporan
+  function deleteReportByReportCodeRIwayat(code) {
     const reports = JSON.parse(localStorage.getItem("reports")) || [];
     const updatedReports = reports.filter((report) => report.code !== code);
 
