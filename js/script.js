@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  / Ambil elemen input dan tombol delete
+  // Ambil elemen input dan tombol delete
   const deleteButton = document.getElementById("deleteBtnRiwayat"); // Ubah id tombol
   if (deleteButton) {
     // Tambahkan event listener untuk tombol delete
