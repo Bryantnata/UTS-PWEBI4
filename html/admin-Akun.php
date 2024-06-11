@@ -46,7 +46,7 @@
                 <ul>
                   <li>
                     <a
-                      href="/html/admin-Dashboard.html"
+                      href="/html/admin-Dashboard.php"
                       class="block py-2 px-4 hover:bg-gray-700 active:bg-blue-500"
                       id="dashboardBtn"
                       >Dashboard</a
@@ -54,7 +54,7 @@
                   </li>
                   <li>
                     <a
-                      href="/html/admin-Transaksi.html"
+                      href="/html/admin-Transaksi.php"
                       class="block py-2 px-4 hover:bg-gray-700"
                       id="transaksiBtn"
                       >Transaksi</a
@@ -62,7 +62,7 @@
                   </li>
                   <li>
                     <a
-                      href="/html/admin-Pembayaran.html"
+                      href="/html/admin-Pembayaran.php"
                       class="block py-2 px-4 hover:bg-gray-700"
                       id="pembayaranBtn"
                       >Pembayaran</a
@@ -70,7 +70,7 @@
                   </li>
                   <li>
                     <a
-                      href="/html/admin-Laporan.html"
+                      href="/html/admin-Laporan.php"
                       class="block py-2 px-4 hover:bg-gray-700"
                       id="transaksiBtn"
                       >Laporan</a
@@ -78,7 +78,7 @@
                   </li>
                   <li>
                     <a
-                      href="/html/admin-riwayat.html"
+                      href="/html/admin-riwayat.php"
                       class="block py-2 px-4 hover:bg-gray-700"
                       id="riwayatBtn"
                       >Riwayat</a
@@ -86,7 +86,7 @@
                   </li>
                   <li>
                     <a
-                      href="/html/admin-Akun.html"
+                      href="/html/admin-Akun.php"
                       class="block py-2 px-4 hover:bg-gray-700"
                       id="akunBtn"
                       >Akun</a
