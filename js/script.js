@@ -262,45 +262,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Ambil elemen input dan tombol delete
-  const deleteButton = document.getElementById("deleteBtnRiwayat"); // Ubah id tombol
-  if (deleteButton) {
-    // Tambahkan event listener untuk tombol delete
-    deleteButton.addEventListener("click", function () {
-      // Dapatkan nilai kode laporan yang dimasukkan pengguna
-      const reportCode = document.getElementById("deleteRiwayatRowIndex").value;
-
-      // Panggil fungsi untuk menghapus laporan berdasarkan kode laporan
-      deleteReportByReportCodeRIwayat(reportCode);
-    });
-  }
-
   // Fungsi untuk menghapus laporan berdasarkan kode laporan
   function deleteReportByReportCode(code) {
-    const reports = JSON.parse(localStorage.getItem("reports")) || [];
-    const updatedReports = reports.filter((report) => report.code !== code);
-
-    if (updatedReports.length === reports.length) {
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Laporan tidak ditemukan.",
-      });
-      return;
-    }
-
-    localStorage.setItem("reports", JSON.stringify(updatedReports));
-    Swal.fire({
-      icon: "success",
-      title: "Success!",
-      text: "Laporan berhasil dihapus.",
-    }).then(() => {
-      location.reload();
-    });
-  }
-
-  // Fungsi untuk menghapus laporan berdasarkan kode laporan
-  function deleteReportByReportCodeRIwayat(code) {
     const reports = JSON.parse(localStorage.getItem("reports")) || [];
     const updatedReports = reports.filter((report) => report.code !== code);
 
@@ -328,55 +291,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (deleteAllBtn) {
     // Tambahkan event listener untuk tombol "Hapus Semua Data"
     deleteAllBtn.addEventListener("click", function () {
-      // Cek apakah ada data yang tersimpan di Local Storage
-      const reports = JSON.parse(localStorage.getItem("reports"));
-      if (!reports || reports.length === 0) {
-        // Jika tidak ada data yang tersimpan, tampilkan pesan bahwa tidak ada data yang bisa dihapus
-        Swal.fire("Info", "Tidak ada data yang tersimpan.", "info");
-      } else {
-        // Jika ada data yang tersimpan, tampilkan pop-up untuk memasukkan password admin
-        Swal.fire({
-          title: "Konfirmasi",
-          text: "Masukkan password untuk menghapus semua data:",
-          icon: "info",
-          input: "password",
-          inputAttributes: {
-            placeholder: "Password",
-            type: "password",
-          },
-          showCancelButton: true,
-          confirmButtonText: "Hapus",
-          cancelButtonText: "Batal",
-          preConfirm: (password) => {
-            // Validasi password admin
-            if (password === "admin") {
-              // Hapus semua data dari Local Storage
-              localStorage.removeItem("reports");
-              // Tampilkan pesan sukses setelah data dihapus
-              return Swal.fire(
-                "Success!",
-                "Semua data berhasil dihapus.",
-                "success"
-              ).then(() => {
-                // Muat ulang halaman untuk menyegarkan tampilan
-                location.reload();
-              });
-            } else {
-              // Tampilkan pesan kesalahan jika password admin tidak valid
-              Swal.showValidationMessage("Password tidak valid.");
-              return false;
-            }
-          },
-        });
-      }
-    });
-  }
-
-  // Ambil elemen button "Hapus Semua Data Riwayat"
-  const deleteAllRIwayatBtn = document.getElementById("deleteAllRIwayatBtn");
-  if (deleteAllRIwayatBtn) {
-    // Tambahkan event listener untuk tombol "Hapus Semua Data"
-    deleteAllRIwayatBtn.addEventListener("click", function () {
       // Cek apakah ada data yang tersimpan di Local Storage
       const reports = JSON.parse(localStorage.getItem("reports"));
       if (!reports || reports.length === 0) {
